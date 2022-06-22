@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "./Modal";
+import { getImageUrl } from "./Helpers";
 
 export default function ModalPost(props) {
     return (
@@ -8,7 +9,7 @@ export default function ModalPost(props) {
             <Modal open={props.open} setOpen={props.setOpen} size="lg">
                 <div className="flex flex-row h-full">
                     <div className="w-3/5">
-                        <img src={props.post.image} className="" />
+                        <img src={getImageUrl(props.post.image)} className="" />
                     </div>
 
                     <div className="w-2/5 relative pt-16">
@@ -17,10 +18,10 @@ export default function ModalPost(props) {
                                 <a href="" className="">
                                     <img
                                         className="rounded-full w-8 max-w-none inline"
-                                        src="images/profile.jpeg"
+                                        src={props.post.user.image}
                                     />{" "}
                                     <span className="font-medium text-sm ml-2">
-                                        {props.post.username}
+                                        {props.post.user.username}
                                     </span>
                                 </a>
                             </div>
@@ -33,16 +34,16 @@ export default function ModalPost(props) {
 
                         <div className="overflow-scroll h-full pb-48">
                             <div className="flex flex-row p-3">
-                                <div className="flex-1">
+                                <div>
                                     <img
                                         className="rounded-full w-8 inline max-w-none"
-                                        src={props.post.user_image}
+                                        src={props.post.user.image}
                                     />
                                 </div>
                                 <div className="">
                                     <div className="px-3 text-sm">
                                         <span className="font-medium mr-2">
-                                            gigo6000
+                                            {props.post.user.username}
                                         </span>
                                         {props.post.caption}
                                     </div>
@@ -51,17 +52,20 @@ export default function ModalPost(props) {
 
                             {props.post.comments &&
                                 props.post.comments.map((comment, index) => (
-                                    <div className="flex flex-row p-3">
+                                    <div
+                                        className="flex flex-row p-3"
+                                        key={comment.id}
+                                    >
                                         <div className="">
                                             <img
                                                 className="rounded-full w-8 inline max-w-none"
-                                                src={comment.user_image}
+                                                src={comment.user.image}
                                             />
                                         </div>
                                         <div className="grow relative">
                                             <div className="px-4 text-sm">
                                                 <span className="font-medium mr-2">
-                                                    {comment.username}
+                                                    {comment.user.username}
                                                 </span>
                                                 {comment.comment}
                                             </div>
