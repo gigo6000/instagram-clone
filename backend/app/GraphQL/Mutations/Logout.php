@@ -2,7 +2,6 @@
 
 namespace App\GraphQL\Mutations;
 
-use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Support\Facades\Auth;
 
 class Logout

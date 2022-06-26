@@ -4,13 +4,15 @@ import Profile from "./pages/Profile";
 import ProfileEdit from "./pages/ProfileEdit";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import ModalSettings from "./ModalSettings";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
+import ModalSettings from "./components/ModalSettings";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 library.add(fab, fas, far);
 
@@ -71,6 +73,8 @@ export default function App() {
                 open={isSettingsModalOpen}
                 setOpen={setIsSettingsModalOpen}
             />
+
+            <ToastContainer theme="dark" position="bottom-center" />
         </>
     );
 }

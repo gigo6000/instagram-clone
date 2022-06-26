@@ -2,10 +2,9 @@
 
 namespace App\GraphQL\Mutations;
 
-use App\Models\PostLike;
 use Illuminate\Support\Facades\Auth;
 
-final class Unlike
+final class UpdateUser
 {
     /**
      * @param  null  $_
@@ -19,16 +18,15 @@ final class Unlike
             throw new \RuntimeException('Current user not found.');
         }
 
-        $postLike = PostLike::where([
-            'user_id' => $user->id,
-            'post_id' => $args['post_id']
-        ])->first();
+        $user->name = $args['name'];
+        $user->username = $args['username'];
+        $user->bio= $args['bio'];
+        $user->website = $args['website'];
+        $user->phone = $args['phone'];
+        $user->email = $args['email'];
 
-        if ($postLike) {
-            $postLike->delete();
-            return 'deleted';
-        }
+        $user->save();
 
-        return 'not deleted';
+        return $user;
     }
 }

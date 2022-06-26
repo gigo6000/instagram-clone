@@ -3,12 +3,14 @@ import { useQuery } from "@apollo/client";
 import GET_SUGGESTIONS from "../graphql/GET_SUGGESTIONS";
 
 export default function Suggestions(props) {
-    const { loading, error, data } = useQuery(GET_SUGGESTIONS, {
-        variables: { user_id: props.user_id },
-    });
+    const { loading, error, data } = useQuery(GET_SUGGESTIONS);
 
     if (loading) {
         return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error...</div>;
     }
 
     return (

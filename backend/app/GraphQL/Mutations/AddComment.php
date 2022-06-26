@@ -2,10 +2,10 @@
 
 namespace App\GraphQL\Mutations;
 
-use App\Models\PostLike;
+use App\Models\PostComment;
 use Illuminate\Support\Facades\Auth;
 
-final class Unlike
+final class AddComment
 {
     /**
      * @param  null  $_
@@ -19,16 +19,10 @@ final class Unlike
             throw new \RuntimeException('Current user not found.');
         }
 
-        $postLike = PostLike::where([
+        return PostComment::create([
+            'post_id' => $args['post_id'],
             'user_id' => $user->id,
-            'post_id' => $args['post_id']
-        ])->first();
-
-        if ($postLike) {
-            $postLike->delete();
-            return 'deleted';
-        }
-
-        return 'not deleted';
+            'comment' => $args['comment'],
+        ]);
     }
 }

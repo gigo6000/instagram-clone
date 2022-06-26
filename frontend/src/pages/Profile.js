@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ModalPost from "../ModalPost";
+import ModalPost from "../components/ModalPost";
 import ProfilePost from "../components/ProfilePost";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
@@ -48,7 +48,7 @@ export default function Profile(props) {
                                 className="bg-white ml-3  text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded text-sm"
                             >
                                 Edit Profile
-                            </Link>{" "}
+                            </Link>
                             <a
                                 className="ml-3 cursor-pointer"
                                 onClick={() =>
@@ -66,27 +66,26 @@ export default function Profile(props) {
                                 <strong>{data.me.total_posts}</strong> posts
                             </div>
                             <div className="basis-1/2">
-                                <strong>{data.me.total_followers}</strong>{" "}
+                                <strong className="mr-1">
+                                    {data.me.total_followers}
+                                </strong>
                                 followers
                             </div>
                             <div className="basis-1/2">
-                                <strong>{data.me.total_following}</strong>{" "}
+                                <strong className="mr-1">
+                                    {data.me.total_following}
+                                </strong>
                                 following
                             </div>
                         </div>
-                        <h3 className="font-bold">Carlos Mafla | Web Dev</h3>
-                        <p>&gt; Full Stack Web Developer 💻 </p>
-                        <p>&gt; 15+ years of experience 🚀 </p>
-                        <p>&gt; Helping devs learn new skills 🖥 💸 </p>
-                        <p>
-                            &gt; JavaScript/React/Symfony/Laravel/Spanglish 🇨🇴🇺🇸
-                        </p>
+                        <h3 className="font-bold">{data.me.name}</h3>
+                        <div className="">{data.me.bio}</div>
                         <a
-                            href="https://carlosmafla.com"
+                            href={data.me.website}
                             target="_blank"
                             className="text-blue-900 font-bold"
                         >
-                            carlosmafla.com
+                            {data.me.website}
                         </a>
                     </div>
                 </div>
@@ -131,7 +130,6 @@ export default function Profile(props) {
                             </div>
                             <div className="w-full">
                                 <div className="text-center overflow-hidden text-ellipsis">
-                                    {" "}
                                     Facebook
                                 </div>
                             </div>
@@ -211,13 +209,22 @@ export default function Profile(props) {
 
                 <ul className="flex flex-row p-2 text-sm items-center	justify-center border-t text-gray-400 h-16 lg:hidden">
                     <li className="flex-1 text-center">
-                        <b className="text-black block">107</b> posts
+                        <b className="text-black block">
+                            {data.me.total_posts}
+                        </b>{" "}
+                        posts
                     </li>
                     <li className="flex-1 text-center">
-                        <b className="text-black block">1,460</b> followers
+                        <b className="text-black block">
+                            {data.me.total_followers}
+                        </b>
+                        followers
                     </li>
                     <li className="flex-1 text-center">
-                        <b className="text-black block">125</b> following
+                        <b className="text-black block">
+                            {data.me.total_following}
+                        </b>
+                        following
                     </li>
                 </ul>
 

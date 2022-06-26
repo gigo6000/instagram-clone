@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import ModalPostActions from "../ModalPostActions";
+import ModalPostActions from "./ModalPostActions";
 import { useMutation, useQuery } from "@apollo/client";
 import LIKE from "../graphql/LIKE";
 import UNLIKE from "../graphql/UNLIKE";
-import GET_CURRENT_USER from "../graphql/GET_CURRENT_USER";
-import GET_POST_LIKES from "../graphql/GET_POST_LIKES";
+import GET_FEED from "../graphql/GET_FEED";
 import ADD_COMMENT from "../graphql/ADD_COMMENT";
 import { getImageUrl } from "../Helpers";
 
@@ -19,6 +18,7 @@ function Post(props) {
         likes,
         created_time_ago,
         comments,
+        postLikes,
     } = props;
 
     const [isBookmarked, setIsBookmarked] = useState(false);
@@ -26,33 +26,17 @@ function Post(props) {
     const [comment, setComment] = useState("");
     const [newComments, setNewComments] = useState([]);
     const [loading, setLoading] = useState(false);
-    const { loading: loadingUser, error, data } = useQuery(GET_CURRENT_USER);
-    const {
-        loading: loadingLike,
-        error: errorLike,
-        data: dataLike,
-    } = useQuery(GET_POST_LIKES, {
-        variables: { user_id: data?.me?.id, post_id: id },
-        skip: !data,
-    });
     const [like] = useMutation(LIKE);
     const [unlike] = useMutation(UNLIKE);
     const [addComment] = useMutation(ADD_COMMENT);
 
-    if (loadingLike || loadingUser) {
-        return <div>loading...</div>;
-    }
-    const token = localStorage.getItem("token");
-
     const likePost = async (id) => {
         try {
             await like({
-                variables: { user_id: data.me.id, post_id: id },
+                variables: { post_id: id },
                 refetchQueries: [
                     {
-                        query: GET_POST_LIKES,
-                        variables: { user_id: data?.me?.id, post_id: id },
-                        skip: !data,
+                        query: GET_FEED,
                     },
                 ],
             });
@@ -64,12 +48,10 @@ function Post(props) {
     const unlikePost = async (id) => {
         try {
             await unlike({
-                variables: { user_id: data.me.id, post_id: id },
+                variables: { post_id: id },
                 refetchQueries: [
                     {
-                        query: GET_POST_LIKES,
-                        variables: { user_id: data?.me?.id, post_id: id },
-                        skip: !data,
+                        query: GET_FEED,
                     },
                 ],
             });
@@ -87,7 +69,7 @@ function Post(props) {
 
         try {
             const response = await addComment({
-                variables: { user_id: data.me.id, post_id: id, comment },
+                variables: { post_id: id, comment },
             });
 
             setLoading(false);
@@ -134,19 +116,17 @@ function Post(props) {
                     <div className="flex-1 ">
                         <a
                             className={`mr-3 cursor-pointer  ${
-                                dataLike.postLike !== null
+                                postLikes.length
                                     ? "text-red-600"
                                     : "hover:text-gray-500"
                             }`}
                             onClick={() =>
-                                dataLike.postLike !== null
-                                    ? unlikePost(id)
-                                    : likePost(id)
+                                postLikes.length ? unlikePost(id) : likePost(id)
                             }
                         >
                             <FontAwesomeIcon
                                 icon={[
-                                    dataLike.postLike !== null ? "fas" : "far",
+                                    postLikes.length ? "fas" : "far",
                                     "heart",
                                 ]}
                             />
@@ -176,42 +156,44 @@ function Post(props) {
                 <div className="px-3 text-sm">
                     <span className="font-medium">{username}</span> {caption}
                 </div>
-
-                {comments && (
+                {comments.length ? (
                     <a
                         href="#"
                         className="block text-gray-500 px-3 py-2 text-sm"
                     >
                         View all {comments.length} comments
                     </a>
+                ) : (
+                    ""
                 )}
 
-                {comments &&
-                    comments.slice(-3).map((comment, index) => (
-                        <div
-                            key={comment.id}
-                            className={`px-3 ${
-                                index !== 0 ? "pt-2" : ""
-                            } text-sm`}
-                        >
-                            <span className="font-medium">
-                                {comment.user.username}
-                            </span>{" "}
-                            {comment.comment}
-                            <a
-                                className={`block float-right text-xs cursor-pointer ${
-                                    comment.is_liked ? "text-red-600" : ""
-                                }`}
-                            >
-                                <FontAwesomeIcon
-                                    icon={[
-                                        comment.is_liked ? "fas" : "far",
-                                        "heart",
-                                    ]}
-                                />
-                            </a>
-                        </div>
-                    ))}
+                {comments.length
+                    ? comments.slice(-3).map((comment, index) => (
+                          <div
+                              key={comment.id}
+                              className={`px-3 ${
+                                  index !== 0 ? "pt-2" : ""
+                              } text-sm`}
+                          >
+                              <span className="font-medium">
+                                  {comment.user.username}
+                              </span>{" "}
+                              {comment.comment}
+                              <a
+                                  className={`block float-right text-xs cursor-pointer ${
+                                      comment.is_liked ? "text-red-600" : ""
+                                  }`}
+                              >
+                                  <FontAwesomeIcon
+                                      icon={[
+                                          comment.is_liked ? "fas" : "far",
+                                          "heart",
+                                      ]}
+                                  />
+                              </a>
+                          </div>
+                      ))
+                    : ""}
                 {newComments &&
                     newComments.map((comment, index) => (
                         <div

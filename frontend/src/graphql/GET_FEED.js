@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 const GET_FEED = gql`
-    query getFeed($user_id: ID!) {
-        feed(user_id: $user_id) {
+    query getFeed {
+        feed {
             id
             caption
             image
@@ -23,6 +23,10 @@ const GET_FEED = gql`
                     username
                     image
                 }
+            }
+            postLikes {
+                user_id
+                post_id
             }
         }
     }

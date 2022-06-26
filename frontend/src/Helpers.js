@@ -1,5 +1,7 @@
 export const getImageUrl = (imagePath) => {
-    return `http://localhost/storage/${imagePath.replace("public/", "")}`;
+    const baseUrl = "http://localhost";
+
+    return `${baseUrl}/storage/${imagePath.replace("public/", "")}`;
 };
 
 export const signOut = async (client, navigate, logout) => {
@@ -11,4 +13,8 @@ export const signOut = async (client, navigate, logout) => {
     } catch (error) {
         console.log("error:", error);
     }
+};
+
+export const classNames = (...classes) => {
+    return classes.filter(Boolean).join(" ");
 };

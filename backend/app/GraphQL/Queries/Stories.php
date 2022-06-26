@@ -2,10 +2,11 @@
 
 namespace App\GraphQL\Queries;
 
-use App\Models\Post;
+use App\Models\User;
+use App\Models\UserFollower;
 use Illuminate\Support\Facades\Auth;
 
-class Feed
+class Stories
 {
     public function __invoke($_, array $args)
     {
@@ -15,6 +16,10 @@ class Feed
             throw new \RuntimeException('Current user not found.');
         }
 
-        return Post::where('user_id', '!=', $user->id)->get()->sortByDesc('created_at')->take(10);
+        return User::whereIn(
+            'id',
+            UserFollower::select(['user_id'])
+                ->where('follower_id', $user->id)
+        )->get()->take(15);
     }
 }

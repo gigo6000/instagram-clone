@@ -6,6 +6,10 @@ const GET_CURRENT_USER = gql`
             id
             name
             username
+            email
+            bio
+            website
+            phone
             image
             total_posts
             total_followers

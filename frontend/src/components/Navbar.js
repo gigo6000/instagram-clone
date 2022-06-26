@@ -2,26 +2,22 @@ import React, { useState, useCallback, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Menu, Transition } from "@headlessui/react";
-import Modal from "../Modal";
 import { useDropzone } from "react-dropzone";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
+import { signOut, classNames } from "../Helpers";
+import { useApolloClient } from "@apollo/client";
+import Modal from "./Modal";
+import PostPreview from "./PostPreview";
 import GET_CURRENT_USER from "../graphql/GET_CURRENT_USER";
 import LOGOUT from "../graphql/LOGOUT";
-import UPLOAD_FILE from "../graphql/UPLOAD_FILE";
-import { signOut } from "../Helpers";
-import { useApolloClient } from "@apollo/client";
-
-function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-}
+import ADD_POST from "../graphql/ADD_POST";
 
 export default function Navbar(props) {
     const { setIsSettingsModalOpen } = props;
     const [caption, setCaption] = useState("");
     const [isNewPostModalOpen, setIsNewPostModalOpen] = useState(false);
     const onDrop = useCallback((acceptedFiles) => {
-        // Do something with the files
         setFiles(
             acceptedFiles.map((file) =>
                 Object.assign(file, { preview: URL.createObjectURL(file) })
@@ -37,7 +33,7 @@ export default function Navbar(props) {
     const { loading: loadingUser, error, data } = useQuery(GET_CURRENT_USER);
     const [logout] = useMutation(LOGOUT);
     const client = useApolloClient();
-    const [uploadFile] = useMutation(UPLOAD_FILE, {
+    const [addPost] = useMutation(ADD_POST, {
         onCompleted: (data) => console.log(data),
     });
     const navigate = useNavigate();
@@ -56,7 +52,7 @@ export default function Navbar(props) {
     };
 
     const share = () => {
-        uploadFile({
+        addPost({
             variables: {
                 user_id: data.me.id,
                 caption: caption,
@@ -66,60 +62,6 @@ export default function Navbar(props) {
         });
         setIsNewPostModalOpen(false);
         navigate(`/${data.me.username}`);
-    };
-
-    const showCreatePost = () => {
-        if (files.length === 0) {
-            return;
-        }
-
-        return (
-            <div className="flex">
-                <div className="w-3/4 overflow-hidden border-r">
-                    <div className="flex justify-center items-center h-[50rem] ">
-                        <img
-                            src={files[0].preview}
-                            key={files[0].name}
-                            className="h-[60rem] max-w-none"
-                        />
-                    </div>
-                </div>
-                <div className="w-1/4">
-                    <div className="p-3 border-b">
-                        <a href="" className="">
-                            <img
-                                className="rounded-full w-8 max-w-none inline"
-                                src={data.me.image}
-                            />{" "}
-                            <span className="font-medium text-sm ml-2">
-                                {data.me.name}
-                            </span>
-                        </a>
-                        <textarea
-                            type="text"
-                            className="p-1 px-0 mt-3 w-full outline-0 h-40"
-                            placeholder="Write a caption..."
-                            onChange={handleCaptionChange}
-                            value={caption}
-                        />
-                        <div className="flex">
-                            <div className="w-3/6">
-                                <FontAwesomeIcon
-                                    className="text-gray-400 text-lg"
-                                    icon={["far", "face-smile"]}
-                                />
-                            </div>
-                            <div className="w-3/6 text-right">
-                                <span className="text-gray-200 text-sm">
-                                    {" "}
-                                    0/200
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
     };
 
     const isFileDropped = () => {
@@ -158,7 +100,12 @@ export default function Navbar(props) {
                     </div>
                 ) : (
                     <div className="flex flex-col h-full">
-                        {showCreatePost()}
+                        <PostPreview
+                            user={data.me}
+                            caption={caption}
+                            handleCaptionChange={handleCaptionChange}
+                            files={files}
+                        />
                     </div>
                 )}
             </Modal>
@@ -169,7 +116,7 @@ export default function Navbar(props) {
                             <Link to="/">
                                 <img
                                     className=""
-                                    src="images/logo.svg"
+                                    src="/images/logo.svg"
                                     width="120"
                                 />
                             </Link>
@@ -203,7 +150,6 @@ export default function Navbar(props) {
                                     </a>
                                 </li>
                                 <li>
-                                    {" "}
                                     <a
                                         className="cursor-pointer"
                                         onClick={() => openNewPostModal()}
@@ -214,7 +160,6 @@ export default function Navbar(props) {
                                     </a>
                                 </li>
                                 <li>
-                                    {" "}
                                     <a className="cursor-pointer">
                                         <FontAwesomeIcon
                                             icon={["far", "compass"]}
@@ -222,7 +167,6 @@ export default function Navbar(props) {
                                     </a>
                                 </li>
                                 <li>
-                                    {" "}
                                     <a className="cursor-pointer">
                                         <FontAwesomeIcon
                                             icon={["far", "heart"]}
@@ -230,7 +174,6 @@ export default function Navbar(props) {
                                     </a>
                                 </li>
                                 <li>
-                                    {" "}
                                     <Menu
                                         as="div"
                                         className="relative inline-block text-left"

@@ -11,17 +11,12 @@ import { signOut } from "../Helpers";
 
 export default function Home(props) {
     const navigate = useNavigate();
+    const { loading, error, data } = useQuery(GET_FEED);
     const {
         loading: loadingCurrentUser,
         error: errorCurrentUser,
         data: dataCurrentUser,
     } = useQuery(GET_CURRENT_USER);
-
-    const userId = dataCurrentUser?.me?.id;
-    const { loading, error, data } = useQuery(GET_FEED, {
-        skip: !userId,
-        variables: { user_id: userId },
-    });
 
     const [logout] = useMutation(LOGOUT);
     const client = useApolloClient();
@@ -29,6 +24,12 @@ export default function Home(props) {
     if (loadingCurrentUser || loading) {
         return "Loading...";
     }
+
+    if (error) {
+        return "Error...";
+    }
+
+    console.log("data:", data);
 
     return (
         <main className="bg-zinc-50 grid grid-cols-3">
@@ -45,6 +46,7 @@ export default function Home(props) {
                         likes={post.likes}
                         created_time_ago={post.created_time_ago}
                         comments={post.comments}
+                        postLikes={post.postLikes}
                     />
                 ))}
             </div>

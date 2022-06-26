@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
-const GET_SUGGESTIONS = gql`
-    query getSuggestions {
-        suggestions {
+const GET_STORIES = gql`
+    query GetStories {
+        stories {
             id
             username
             image
@@ -10,4 +10,4 @@ const GET_SUGGESTIONS = gql`
     }
 `;
 
-export default GET_SUGGESTIONS;
+export default GET_STORIES;

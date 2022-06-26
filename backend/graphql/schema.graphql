@@ -9,11 +9,11 @@ scalar Upload
 "Indicates what fields are available at the top level of a query operation."
 type Query {
     me: User @auth
-    posts: [Post] @all
-    post(id: Int! @eq): Post @find
-    postLike(user_id: ID! @eq, post_id: ID! @eq): PostLike @first
-    suggestions(user_id: ID!): [User] @guard
-    feed(user_id: ID!): [Post] @guard
+    posts: [Post] @all @guard
+    post(id: Int! @eq): Post @find @guard
+    suggestions: [User] @guard
+    feed: [Post] @guard
+    stories: [User] @guard
 }
 
 type User {
@@ -21,6 +21,9 @@ type User {
     name: String!
     username: String!
     image: String!
+    bio: String!
+    website: String!
+    phone: String!
     email: String!
     email_verified_at: DateTime
     total_posts: Int
@@ -75,11 +78,17 @@ type PostComment {
 type Mutation {
     login(email: String!, password: String!): String!
     logout: String @guard
-    like(user_id: ID!, post_id: ID!): PostLike @upsert @guard
-    unlike(user_id: ID!, post_id: ID!): String @guard
-    follow(user_id: ID!, follower_id: ID!): UserFollower @create @guard
-    addComment(user_id: ID!, post_id: ID!, comment: String!): PostComment
-        @create
-        @guard
-    upload(user_id: ID!, caption: String!, file: Upload!): Post
+    like(post_id: ID!): PostLike @guard
+    unlike(post_id: ID!): String @guard
+    follow(user_id: ID!): UserFollower @guard
+    addComment(post_id: ID!, comment: String!): PostComment @guard
+    addPost(caption: String!, file: Upload!): Post @guard
+    updateUser(
+        name: String
+        username: String
+        bio: String
+        website: String @rules(apply: ["url"])
+        phone: String
+        email: String @rules(apply: ["email"])
+    ): User @guard
 }

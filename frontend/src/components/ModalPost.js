@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "./Modal";
-import { getImageUrl } from "./Helpers";
+import { getImageUrl } from "../Helpers";
 
 export default function ModalPost(props) {
     return (
