@@ -38,6 +38,7 @@ export default function Home(props) {
                     <Post
                         key={post.id}
                         id={post.id}
+                        currentUserId={dataCurrentUser.me.id}
                         caption={post.caption}
                         image={post.image}
                         username={post.user.username}

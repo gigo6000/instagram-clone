@@ -1,16 +1,19 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalPostActions from "./ModalPostActions";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import LIKE from "../graphql/LIKE";
 import UNLIKE from "../graphql/UNLIKE";
 import GET_FEED from "../graphql/GET_FEED";
 import ADD_COMMENT from "../graphql/ADD_COMMENT";
 import { getImageUrl } from "../Helpers";
 
+const MAX_COMMENTS = 3;
+
 function Post(props) {
     const {
         id,
+        currentUserId,
         image,
         caption,
         username,
@@ -57,6 +60,12 @@ function Post(props) {
         } catch (error) {
             console.log("error:", error);
         }
+    };
+
+    const isLikedByUser = () => {
+        return postLikes.filter(
+            (postLike) => parseInt(postLike.user_id) === parseInt(currentUserId)
+        ).length;
     };
 
     const createComment = async () => {
@@ -119,17 +128,21 @@ function Post(props) {
                     <div className="flex-1 ">
                         <a
                             className={`mr-3 cursor-pointer  ${
-                                postLikes.length
+                                isLikedByUser() && postLikes.length
                                     ? "text-red-600"
                                     : "hover:text-gray-500"
                             }`}
                             onClick={() =>
-                                postLikes.length ? unlikePost(id) : likePost(id)
+                                isLikedByUser() && postLikes.length
+                                    ? unlikePost(id)
+                                    : likePost(id)
                             }
                         >
                             <FontAwesomeIcon
                                 icon={[
-                                    postLikes.length ? "fas" : "far",
+                                    isLikedByUser() && postLikes.length
+                                        ? "fas"
+                                        : "far",
                                     "heart",
                                 ]}
                             />
@@ -159,7 +172,7 @@ function Post(props) {
                 <div className="px-3 text-sm">
                     <span className="font-medium">{username}</span> {caption}
                 </div>
-                {comments.length && comments.length > 3 ? (
+                {comments.length && comments.length > MAX_COMMENTS ? (
                     <a
                         href="#"
                         className="block text-gray-500 px-3 py-2 text-sm"
@@ -171,31 +184,33 @@ function Post(props) {
                 )}
 
                 {comments.length
-                    ? comments.slice(-3).map((comment, index) => (
-                          <div
-                              key={comment.id}
-                              className={`px-3 ${
-                                  index !== 0 ? "pt-2" : ""
-                              } text-sm`}
-                          >
-                              <span className="font-medium">
-                                  {comment.user.username}
-                              </span>{" "}
-                              {comment.comment}
-                              <a
-                                  className={`block float-right text-xs cursor-pointer ${
-                                      comment.is_liked ? "text-red-600" : ""
-                                  }`}
+                    ? comments
+                          .slice(MAX_COMMENTS * -1)
+                          .map((comment, index) => (
+                              <div
+                                  key={comment.id}
+                                  className={`px-3 ${
+                                      index !== 0 ? "pt-2" : ""
+                                  } text-sm`}
                               >
-                                  <FontAwesomeIcon
-                                      icon={[
-                                          comment.is_liked ? "fas" : "far",
-                                          "heart",
-                                      ]}
-                                  />
-                              </a>
-                          </div>
-                      ))
+                                  <span className="font-medium">
+                                      {comment.user.username}
+                                  </span>{" "}
+                                  {comment.comment}
+                                  <a
+                                      className={`block float-right text-xs cursor-pointer ${
+                                          comment.is_liked ? "text-red-600" : ""
+                                      }`}
+                                  >
+                                      <FontAwesomeIcon
+                                          icon={[
+                                              comment.is_liked ? "fas" : "far",
+                                              "heart",
+                                          ]}
+                                      />
+                                  </a>
+                              </div>
+                          ))
                     : ""}
 
                 <div className="text-gray-500 uppercase px-3 pt-2 pb-5 text-[0.65rem] tracking-wide">
@@ -214,7 +229,7 @@ function Post(props) {
                         />
                     </div>
                     <div className="flex items-center">
-                        <a className="text-2xl" href="#">
+                        <a className="text-2xl cursor-pointer">
                             <FontAwesomeIcon icon={["far", "face-smile"]} />
                         </a>
                     </div>
