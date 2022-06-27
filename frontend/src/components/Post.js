@@ -24,7 +24,6 @@ function Post(props) {
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [comment, setComment] = useState("");
-    const [newComments, setNewComments] = useState([]);
     const [loading, setLoading] = useState(false);
     const [like] = useMutation(LIKE);
     const [unlike] = useMutation(UNLIKE);
@@ -68,13 +67,17 @@ function Post(props) {
         setLoading(true);
 
         try {
-            const response = await addComment({
+            await addComment({
                 variables: { post_id: id, comment },
+                refetchQueries: [
+                    {
+                        query: GET_FEED,
+                    },
+                ],
             });
 
             setLoading(false);
             setComment("");
-            setNewComments([...newComments, response.data.addComment]);
         } catch (error) {
             console.log("error:", error);
         }
@@ -156,7 +159,7 @@ function Post(props) {
                 <div className="px-3 text-sm">
                     <span className="font-medium">{username}</span> {caption}
                 </div>
-                {comments.length ? (
+                {comments.length && comments.length > 3 ? (
                     <a
                         href="#"
                         className="block text-gray-500 px-3 py-2 text-sm"
@@ -194,32 +197,6 @@ function Post(props) {
                           </div>
                       ))
                     : ""}
-                {newComments &&
-                    newComments.map((comment, index) => (
-                        <div
-                            key={comment.id}
-                            className={`px-3 ${
-                                index !== 0 ? "pt-2" : ""
-                            } text-sm`}
-                        >
-                            <span className="font-medium">
-                                {comment.user.username}
-                            </span>{" "}
-                            {comment.comment}
-                            <a
-                                className={`block float-right text-xs cursor-pointer ${
-                                    comment.is_liked ? "text-red-600" : ""
-                                }`}
-                            >
-                                <FontAwesomeIcon
-                                    icon={[
-                                        comment.is_liked ? "fas" : "far",
-                                        "heart",
-                                    ]}
-                                />
-                            </a>
-                        </div>
-                    ))}
 
                 <div className="text-gray-500 uppercase px-3 pt-2 pb-5 text-[0.65rem] tracking-wide">
                     {created_time_ago}

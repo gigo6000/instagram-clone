@@ -1,12 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useMutation, gql } from "@apollo/client";
-
-const LOGIN_MUTATION = gql`
-    mutation LoginMutation($email: String!, $password: String!) {
-        login(email: $email, password: $password)
-    }
-`;
+import { useMutation } from "@apollo/client";
+import LOGIN from "../graphql/LOGIN";
 
 export default function Login(props) {
     const [email, setEmail] = useState("");
@@ -14,7 +9,7 @@ export default function Login(props) {
     const navigate = useNavigate();
     const [error, setError] = useState();
 
-    const [login] = useMutation(LOGIN_MUTATION, {
+    const [login] = useMutation(LOGIN, {
         variables: {
             email: email,
             password: password,
@@ -22,14 +17,11 @@ export default function Login(props) {
     });
 
     const handleSubmit = async (e) => {
-        console.log("You clicked submit.");
         e.preventDefault();
 
         try {
             const { data } = await login();
-            console.log("data:", data);
             localStorage.setItem("token", data.login);
-            // localStorage.setItem(AUTH_TOKEN, login.token);
             navigate("/");
         } catch (e) {
             setError(e);
@@ -83,7 +75,7 @@ export default function Login(props) {
                     </div>
                     <div className="bg-white border border-gray-300 text-center w-80 py-4">
                         <span className="text-sm">Don't have an account?</span>
-                        <a className="text-blue-500 text-sm font-semibold ml-1">
+                        <a className="text-blue-500 text-sm font-semibold ml-1 cursor-pointer">
                             Sign up
                         </a>
                     </div>

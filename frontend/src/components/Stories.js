@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Slider from "react-slick";
 import { useQuery } from "@apollo/client";
 import GET_STORIES from "../graphql/GET_STORIES";
+import Spinner from "../components/Spinner";
 
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -12,7 +13,7 @@ export default function Stories(props) {
     const sliderRef = useRef();
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Spinner />;
     }
 
     if (error) {

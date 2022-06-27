@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMutation, useQuery } from "@apollo/client";
 import FOLLOW from "../graphql/FOLLOW";
 import GET_CURRENT_USER from "../graphql/GET_CURRENT_USER";
+import Spinner from "../components/Spinner";
 
 export default function Follow(props) {
     const [loading, setLoading] = useState(false);
@@ -12,7 +13,7 @@ export default function Follow(props) {
     const { loading: loadingUser, error, data } = useQuery(GET_CURRENT_USER);
 
     if (loadingUser) {
-        return <div>loading...</div>;
+        return <Spinner />;
     }
 
     const followUser = async () => {

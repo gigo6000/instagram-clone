@@ -1,12 +1,13 @@
 import Follow from "./Follow";
 import { useQuery } from "@apollo/client";
 import GET_SUGGESTIONS from "../graphql/GET_SUGGESTIONS";
+import Spinner from "../components/Spinner";
 
 export default function Suggestions(props) {
     const { loading, error, data } = useQuery(GET_SUGGESTIONS);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <Spinner />;
     }
 
     if (error) {

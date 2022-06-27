@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ModalPost from "../components/ModalPost";
 import ProfilePost from "../components/ProfilePost";
+import Highlights from "../components/Highlights";
+import Spinner from "../components/Spinner";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import GET_CURRENT_USER from "../graphql/GET_CURRENT_USER";
@@ -18,7 +20,11 @@ export default function Profile(props) {
     };
 
     if (loading) {
-        return "Loading...";
+        return <Spinner />;
+    }
+
+    if (error) {
+        return "Error...";
     }
 
     return (
@@ -79,7 +85,7 @@ export default function Profile(props) {
                             </div>
                         </div>
                         <h3 className="font-bold">{data.me.name}</h3>
-                        <div className="">{data.me.bio}</div>
+                        <div className="whitespace-pre-wrap">{data.me.bio}</div>
                         <a
                             href={data.me.website}
                             target="_blank"
@@ -90,122 +96,7 @@ export default function Profile(props) {
                     </div>
                 </div>
 
-                <div className="flex flex-row p-2 content-center mb-8 space-x-2 md:space-x-10 text-sm font-semibold w-full overflow-scroll">
-                    <div className="story w-14  md:w-14 md:w-full">
-                        <a href="#">
-                            <div className="border p-1 rounded-full">
-                                <img
-                                    className="rounded-full"
-                                    src="images/highlight-twitter.png"
-                                    width="80"
-                                />
-                            </div>
-                            <div className="text-center overflow-hidden text-ellipsis ">
-                                Twitter
-                            </div>
-                        </a>
-                    </div>
-                    <div className="story w-14  md:w-14 md:w-full ">
-                        <a href="#">
-                            <div className="border p-1 rounded-full">
-                                <img
-                                    className="rounded-full"
-                                    src="images/highlight-youtube.png"
-                                    width="80"
-                                />
-                            </div>
-                            <div className="text-center overflow-hidden text-ellipsis ">
-                                Youtube
-                            </div>
-                        </a>
-                    </div>
-                    <div className="story w-14  md:w-14 md:w-full ">
-                        <a href="#">
-                            <div className="border p-1 rounded-full">
-                                <img
-                                    className="rounded-full"
-                                    src="images/highlight-facebook.png"
-                                    width="80"
-                                />
-                            </div>
-                            <div className="w-full">
-                                <div className="text-center overflow-hidden text-ellipsis">
-                                    Facebook
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div className="story w-14  md:w-14 md:w-full ">
-                        <a href="#">
-                            <div className="border p-1 rounded-full">
-                                <img
-                                    className="rounded-full"
-                                    src="images/highlight-gaming.png"
-                                    width="80"
-                                />
-                            </div>
-                            <div className="text-center  overflow-hidden text-ellipsis ">
-                                Gaming
-                            </div>
-                        </a>
-                    </div>
-                    <div className="story w-14  md:w-14 md:w-full ">
-                        <a href="#">
-                            <div className="border p-1 rounded-full">
-                                <img
-                                    className="rounded-full"
-                                    src="images/highlight-music.png"
-                                    width="80"
-                                />
-                            </div>
-                            <div className="text-center  overflow-hidden text-ellipsis ">
-                                Music
-                            </div>
-                        </a>
-                    </div>
-                    <div className="story w-14  md:w-14 md:w-full ">
-                        <a href="#">
-                            <div className="border p-1 rounded-full">
-                                <img
-                                    className="rounded-full"
-                                    src="images/highlight-setup.png"
-                                    width="80"
-                                />
-                            </div>
-                            <div className="text-center  overflow-hidden text-ellipsis ">
-                                Setup
-                            </div>
-                        </a>
-                    </div>
-                    <div className="story w-14  md:w-14 md:w-full ">
-                        <a href="#">
-                            <div className="border p-1 rounded-full">
-                                <img
-                                    className="rounded-full"
-                                    src="images/highlight-food.png"
-                                    width="80"
-                                />
-                            </div>
-                            <div className="text-center  overflow-hidden text-ellipsis ">
-                                Food
-                            </div>
-                        </a>
-                    </div>
-                    <div className="story w-14  md:w-14 md:w-full ">
-                        <a href="#">
-                            <div className="border p-1 rounded-full">
-                                <img
-                                    className="rounded-full"
-                                    src="images/highlight-movies.png"
-                                    width="80"
-                                />
-                            </div>
-                            <div className="text-center  overflow-hidden text-ellipsis ">
-                                Movies
-                            </div>
-                        </a>
-                    </div>
-                </div>
+                <Highlights />
 
                 <ul className="flex flex-row p-2 text-sm items-center	justify-center border-t text-gray-400 h-16 lg:hidden">
                     <li className="flex-1 text-center">

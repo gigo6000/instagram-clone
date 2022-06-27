@@ -1,9 +1,10 @@
-import React, { useState, useCallback, useEffect, Fragment } from "react";
-import { Routes, Route, Link, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Profile from "./pages/Profile";
-import ProfileEdit from "./pages/ProfileEdit";
+import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import ProfileEdit from "./pages/ProfileEdit";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
@@ -13,6 +14,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import ModalSettings from "./components/ModalSettings";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ChangePassword from "./pages/ChangePassword";
 
 library.add(fab, fas, far);
 
@@ -28,9 +30,7 @@ export default function App() {
                     exact
                     element={
                         <ProtectedRoute>
-                            <Navbar
-                                setIsSettingsModalOpen={setIsSettingsModalOpen}
-                            />
+                            <Navbar />
                             <div className="container pt-8 max-w-5xl">
                                 <Home />
                             </div>
@@ -41,9 +41,7 @@ export default function App() {
                     path="/:username"
                     element={
                         <ProtectedRoute>
-                            <Navbar
-                                setIsSettingsModalOpen={setIsSettingsModalOpen}
-                            />
+                            <Navbar />
                             <div className="container pt-8 max-w-5xl">
                                 <Profile
                                     setIsSettingsModalOpen={
@@ -55,18 +53,20 @@ export default function App() {
                     }
                 />
                 <Route
-                    path="/accounts/edit"
+                    path="/accounts"
                     element={
                         <ProtectedRoute>
-                            <Navbar
-                                setIsSettingsModalOpen={setIsSettingsModalOpen}
-                            />
+                            <Navbar />
                             <div className="container pt-8 max-w-5xl">
-                                <ProfileEdit />
+                                <Settings />
                             </div>
                         </ProtectedRoute>
                     }
-                />
+                >
+                    <Route index element={<Navigate to="edit" replace />} />
+                    <Route path="edit" element={<ProfileEdit />} />
+                    <Route path="password" element={<ChangePassword />} />
+                </Route>
             </Routes>
 
             <ModalSettings

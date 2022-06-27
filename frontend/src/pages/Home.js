@@ -1,6 +1,7 @@
 import Post from "../components/Post";
 import Suggestions from "../components/Suggestions";
 import Stories from "../components/Stories";
+import Spinner from "../components/Spinner";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import GET_CURRENT_USER from "../graphql/GET_CURRENT_USER";
@@ -22,14 +23,12 @@ export default function Home(props) {
     const client = useApolloClient();
 
     if (loadingCurrentUser || loading) {
-        return "Loading...";
+        return <Spinner />;
     }
 
-    if (error) {
+    if (error || errorCurrentUser) {
         return "Error...";
     }
-
-    console.log("data:", data);
 
     return (
         <main className="bg-zinc-50 grid grid-cols-3">
@@ -64,7 +63,7 @@ export default function Home(props) {
                             <div className="text-sm font-medium">
                                 {dataCurrentUser.me.username}
                             </div>
-                            <div className="text-gray-500 text-sm ">
+                            <div className="text-gray-500 text-sm leading-4">
                                 {dataCurrentUser.me.name}
                             </div>
                         </div>
@@ -80,7 +79,7 @@ export default function Home(props) {
                         </div>
                     </div>
 
-                    <Suggestions user_id={dataCurrentUser.me.id} />
+                    <Suggestions />
 
                     <footer className="py-5">
                         <ul className="flex flex-row space-x-4 p-2 text-xs items-center	justify-center space-x-10 text-gray-400">

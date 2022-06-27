@@ -12,9 +12,9 @@ import PostPreview from "./PostPreview";
 import GET_CURRENT_USER from "../graphql/GET_CURRENT_USER";
 import LOGOUT from "../graphql/LOGOUT";
 import ADD_POST from "../graphql/ADD_POST";
+import Spinner from "../components/Spinner";
 
 export default function Navbar(props) {
-    const { setIsSettingsModalOpen } = props;
     const [caption, setCaption] = useState("");
     const [isNewPostModalOpen, setIsNewPostModalOpen] = useState(false);
     const onDrop = useCallback((acceptedFiles) => {
@@ -39,7 +39,7 @@ export default function Navbar(props) {
     const navigate = useNavigate();
 
     if (loadingUser) {
-        return <div>loading...</div>;
+        return <Spinner />;
     }
 
     const openNewPostModal = () => {
@@ -238,25 +238,21 @@ export default function Navbar(props) {
                                                     </Menu.Item>
                                                     <Menu.Item>
                                                         {({ active }) => (
-                                                            <a
+                                                            <Link
+                                                                to="/accounts/edit"
                                                                 className={classNames(
                                                                     active
                                                                         ? "bg-gray-100 text-gray-900"
                                                                         : "text-gray-700",
                                                                     "block px-4 py-2 text-sm cursor-pointer"
                                                                 )}
-                                                                onClick={() =>
-                                                                    setIsSettingsModalOpen(
-                                                                        true
-                                                                    )
-                                                                }
                                                             >
                                                                 <FontAwesomeIcon
                                                                     icon="fa-solid fa-gear"
                                                                     className="mr-3"
                                                                 />
                                                                 Settings
-                                                            </a>
+                                                            </Link>
                                                         )}
                                                     </Menu.Item>
                                                 </div>
