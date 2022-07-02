@@ -6,7 +6,8 @@ import LIKE from "../graphql/LIKE";
 import UNLIKE from "../graphql/UNLIKE";
 import GET_FEED from "../graphql/GET_FEED";
 import ADD_COMMENT from "../graphql/ADD_COMMENT";
-import { getImageUrl } from "../Helpers";
+import { getImageUrl, isLikedByUser } from "../Helpers";
+import ModalPost from "../components/ModalPost";
 
 const MAX_COMMENTS = 3;
 
@@ -22,10 +23,12 @@ function Post(props) {
         created_time_ago,
         comments,
         postLikes,
+        post,
     } = props;
 
     const [isBookmarked, setIsBookmarked] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isPostModalOpen, setPostModalOpen] = useState(false);
     const [comment, setComment] = useState("");
     const [loading, setLoading] = useState(false);
     const [like] = useMutation(LIKE);
@@ -62,12 +65,6 @@ function Post(props) {
         }
     };
 
-    const isLikedByUser = () => {
-        return postLikes.filter(
-            (postLike) => parseInt(postLike.user_id) === parseInt(currentUserId)
-        ).length;
-    };
-
     const createComment = async () => {
         if (!comment) {
             return;
@@ -94,6 +91,12 @@ function Post(props) {
 
     return (
         <>
+            <ModalPost
+                open={isPostModalOpen}
+                setOpen={setPostModalOpen}
+                post={post}
+                currentUserId={currentUserId}
+            />
             <ModalPostActions open={isModalOpen} setOpen={setIsModalOpen} />
             <div className="border border-slate-200 mb-5">
                 <div className="p-3 flex flex-row">
@@ -128,26 +131,29 @@ function Post(props) {
                     <div className="flex-1 ">
                         <a
                             className={`mr-3 cursor-pointer  ${
-                                isLikedByUser() && postLikes.length
+                                isLikedByUser(currentUserId, postLikes)
                                     ? "text-red-600"
                                     : "hover:text-gray-500"
                             }`}
                             onClick={() =>
-                                isLikedByUser() && postLikes.length
+                                isLikedByUser(currentUserId, postLikes)
                                     ? unlikePost(id)
                                     : likePost(id)
                             }
                         >
                             <FontAwesomeIcon
                                 icon={[
-                                    isLikedByUser() && postLikes.length
+                                    isLikedByUser(currentUserId, postLikes)
                                         ? "fas"
                                         : "far",
                                     "heart",
                                 ]}
                             />
                         </a>
-                        <a className="mr-3 hover:text-gray-500 cursor-pointer">
+                        <a
+                            className="mr-3 hover:text-gray-500 cursor-pointer"
+                            onClick={() => setPostModalOpen(true)}
+                        >
                             <FontAwesomeIcon icon={["far", "comment"]} />
                         </a>
                         <a className="hover:text-gray-500 cursor-pointer">
@@ -174,8 +180,8 @@ function Post(props) {
                 </div>
                 {comments.length && comments.length > MAX_COMMENTS ? (
                     <a
-                        href="#"
-                        className="block text-gray-500 px-3 py-2 text-sm"
+                        className="block text-gray-500 px-3 py-2 text-sm cursor-pointer"
+                        onClick={() => setPostModalOpen(true)}
                     >
                         View all {comments.length} comments
                     </a>

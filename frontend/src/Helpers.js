@@ -18,3 +18,12 @@ export const signOut = async (client, navigate, logout) => {
 export const classNames = (...classes) => {
     return classes.filter(Boolean).join(" ");
 };
+
+export const isLikedByUser = (currentUserId, postLikes) => {
+    return (
+        postLikes.length &&
+        postLikes.filter(
+            (postLike) => parseInt(postLike.user_id) === parseInt(currentUserId)
+        ).length
+    );
+};

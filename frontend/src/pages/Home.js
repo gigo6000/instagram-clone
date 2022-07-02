@@ -9,6 +9,7 @@ import GET_FEED from "../graphql/GET_FEED";
 import LOGOUT from "../graphql/LOGOUT";
 import { useApolloClient } from "@apollo/client";
 import { signOut } from "../Helpers";
+import { Link } from "react-router-dom";
 
 export default function Home(props) {
     const navigate = useNavigate();
@@ -37,6 +38,7 @@ export default function Home(props) {
                 {data.feed.map((post) => (
                     <Post
                         key={post.id}
+                        post={post}
                         id={post.id}
                         currentUserId={dataCurrentUser.me.id}
                         caption={post.caption}
@@ -62,7 +64,9 @@ export default function Home(props) {
                         </a>
                         <div className="w-72 pl-2 m-auto">
                             <div className="text-sm font-medium">
-                                {dataCurrentUser.me.username}
+                                <Link to={`/${dataCurrentUser.me.username}`}>
+                                    {dataCurrentUser.me.username}
+                                </Link>
                             </div>
                             <div className="text-gray-500 text-sm leading-4">
                                 {dataCurrentUser.me.name}

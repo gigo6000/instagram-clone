@@ -16,6 +16,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ChangePassword from "./pages/ChangePassword";
 
+//Add all icons to the library so you can use it in your page
 library.add(fab, fas, far);
 
 export default function App() {

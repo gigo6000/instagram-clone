@@ -195,7 +195,7 @@ export default function ProfileEdit(props) {
                         onChange={(e) => setPhone(e.target.value)}
                     />
                 </div>
-            </div>{" "}
+            </div>
             <div className="flex flex-row mt-5 items-center">
                 <div className="w-1/3 flex flex-row place-content-end align-center pr-8" />
                 <div className="w-2/3 pr-10">
@@ -206,7 +206,7 @@ export default function ProfileEdit(props) {
                         disabled={updating}
                     >
                         Submit
-                    </button>{" "}
+                    </button>
                 </div>
             </div>
         </>
