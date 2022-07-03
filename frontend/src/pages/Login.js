@@ -36,7 +36,7 @@ export default function Login(props) {
                 </div>
                 <div>
                     <div className="bg-white border border-gray-300 w-80 pt-10 pb-60 flex items-center flex-col mb-3 relative">
-                        <img className="" src="/images/logo.svg" width="200" />
+                        <img src="/images/logo-instagram.svg" width="200" />
                         <form
                             className="mt-8 w-64 flex flex-col"
                             onSubmit={handleSubmit}

@@ -10,6 +10,7 @@ import LOGOUT from "../graphql/LOGOUT";
 import { useApolloClient } from "@apollo/client";
 import { signOut } from "../Helpers";
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
 
 export default function Home(props) {
     const navigate = useNavigate();
@@ -85,20 +86,7 @@ export default function Home(props) {
                     </div>
 
                     <Suggestions />
-
-                    <footer className="py-5">
-                        <ul className="flex flex-row space-x-4 p-2 text-xs items-center	justify-center space-x-10 text-gray-400">
-                            <li>
-                                <a href="">About</a>
-                            </li>
-                            <li>
-                                <a href="">Privacy</a>
-                            </li>
-                            <li>
-                                <a href="">Terms</a>
-                            </li>
-                        </ul>
-                    </footer>
+                    <Footer />
                 </div>
             </div>
         </main>

@@ -42,6 +42,10 @@ export default function Navbar(props) {
         return <Spinner />;
     }
 
+    if (error) {
+        return "Error...";
+    }
+
     const openNewPostModal = () => {
         setFiles([]);
         setIsNewPostModalOpen(true);
@@ -116,7 +120,7 @@ export default function Navbar(props) {
                             <Link to="/">
                                 <img
                                     className=""
-                                    src="/images/logo.svg"
+                                    src="/images/logo-instagram.svg"
                                     width="120"
                                 />
                             </Link>
@@ -129,7 +133,7 @@ export default function Navbar(props) {
                                 />
                                 <input
                                     id="search"
-                                    className="p-2 bg-gray-100 rounded-lg w-80 pl-10 align-middle placeholder:font-light"
+                                    className="p-2 bg-gray-100 rounded-lg w-80 pl-10 align-middle focus:outline-0 placeholder:font-light"
                                     placeholder="Search"
                                     type="text"
                                 />
