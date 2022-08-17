@@ -120,7 +120,7 @@ export default function Profile(props) {
                     </li>
                 </ul>
 
-                <ul className="flex flex-row text-2xl lg:text-xs items-center justify-center border-t uppercase text-gray-400 tracking-widest h-16">
+                <div className="flex flex-row text-2xl lg:text-xs items-center justify-center border-t uppercase text-gray-400 tracking-widest h-16">
                     <a
                         className={`${
                             activeTab === "posts"
@@ -186,7 +186,7 @@ export default function Profile(props) {
                             Tagged
                         </span>
                     </a>
-                </ul>
+                </div>
 
                 <div className="grid grid-cols-3 gap-1 lg:gap-8">
                     {data.me.posts.map((post) => (

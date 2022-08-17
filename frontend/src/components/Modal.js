@@ -3,7 +3,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Modal(props) {
-    const { open, setOpen } = props;
+    const { open, setOpen, title, size, share, isFileDropped } = props;
 
     const cancelButtonRef = useRef(null);
 
@@ -11,13 +11,14 @@ export default function Modal(props) {
         let utilities = "";
         switch (size) {
             case "xs":
-                utilities = "h-fit sm:max-w-md";
+                utilities = "h-fit sm:max-w-md rounded-lg";
                 break;
             case "lg":
-                utilities = "h-5/6 max-h-[52rem] sm:max-w-6xl";
+                utilities =
+                    "h-5/6 max-h-[52rem] sm:max-w-6xl rounded-md rounded-l-none";
                 break;
             default:
-                utilities = "h-4/5 sm:max-w-screen-md";
+                utilities = "h-4/5 sm:max-w-screen-md rounded-lg";
                 break;
         }
 
@@ -48,29 +49,24 @@ export default function Modal(props) {
                     enterTo="opacity-100 sm:scale-100"
                 >
                     <div
-                        className={`flex items-center justify-center ${
-                            props.title ? "pt-10" : ""
-                        } ${getSizeClasses(props.size)} bg-white ${
-                            props.size === "lg"
-                                ? "rounded-md rounded-l-none"
-                                : "rounded-lg"
-                        }  overflow-hidden shadow-xl transform transition-all align-middle sm:w-full`}
+                        className={`flex items-center justify-center bg-white overflow-hidden shadow-xl transform transition-all align-middle sm:w-full ${
+                            title ? "pt-10" : ""
+                        } ${getSizeClasses(size)}`}
                     >
-                        {props.title && (
+                        {title && (
                             <div className="absolute top-0 w-full text-center border-b py-2 font-semibold">
                                 <Dialog.Title className="inline-block">
-                                    {props.title}
+                                    {title}
                                 </Dialog.Title>
-                                {props.share &&
-                                    props.isFileDropped() && (
-                                        <a
-                                            href="#"
-                                            className="absolute right-5 text-sky-500"
-                                            onClick={props.share}
-                                        >
-                                            Share
-                                        </a>
-                                    )}
+                                {share && isFileDropped() && (
+                                    <a
+                                        href="#"
+                                        className="absolute right-5 text-sky-500"
+                                        onClick={share}
+                                    >
+                                        Share
+                                    </a>
+                                )}
                             </div>
                         )}
                         <div className="w-full h-full">{props.children}</div>

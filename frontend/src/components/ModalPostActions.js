@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "./Modal";
 
 export default function ModalPostActions(props) {
