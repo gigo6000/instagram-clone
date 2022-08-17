@@ -8,7 +8,8 @@
 [![forthebadge](https://forthebadge.com/images/badges/you-didnt-ask-for-this.svg)](https://forthebadge.com)
 
 <p align="center">
-    <img src="https://i.imgur.com/AWbBf1W.png">
+https://user-images.githubusercontent.com/387648/185122286-426d5049-0830-4db6-8840-cfcac784b583.mp4
+
 </p>
 
 This is an Instagram clone built with TailwindCSS, React, Apollo Client and Laravel Lighthouse. This is a great project to learn and improve your Tailwind and React skills also if you are insterested in backend, the GraphQL API is created using Laravel Lighthouse, this is a great project to add to your portfolio if you are just starting as a web developer or full stack developer.
