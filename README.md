@@ -17,12 +17,13 @@
 This is an Instagram clone built with TailwindCSS, React, Apollo Client and Laravel Lighthouse. This is a great project to learn and improve your Tailwind and React skills also if you are insterested in backend, the GraphQL API is created using Laravel Lighthouse, this is a great project to add to your portfolio if you are just starting as a web developer or full stack developer.
 
 ## Stack
- - Frontent
+ - Frontend
     - Tailwind CSS
     - React 
     - React Router
     - Headless UI
     - Apollo Client
+    - Toastify (Notifications)
   - Backend
     - Docker
     - Laravel Sail
