@@ -21,6 +21,7 @@ This is an Instagram clone built with TailwindCSS, React, Apollo Client and Lara
     - Tailwind CSS
     - React 
     - React Router
+    - React Dropzone (drag'n'drop zone for files)
     - Headless UI
     - Apollo Client
     - Toastify (Notifications)
