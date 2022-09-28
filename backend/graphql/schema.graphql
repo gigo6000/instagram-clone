@@ -10,12 +10,32 @@ scalar Upload
 type Query {
     me: User @auth
     posts: [Post] @all @guard
-    post(id: Int! @eq): Post @find @guard
+    post(id: ID! @eq): Post @find @guard
     suggestions: [User] @guard
     feed: [Post] @guard
     stories: [User] @guard
 }
 
+type Mutation {
+    login(email: String!, password: String!): String!
+    logout: String @guard
+    like(post_id: ID!): PostLike @guard
+    unlike(post_id: ID!): String @guard
+    follow(user_id: ID!): UserFollower @guard
+    unfollow(user_id: ID!): String @guard
+    addComment(post_id: ID!, comment: String!): PostComment @guard
+    updateUser(
+        name: String
+        username: String
+        bio: String
+        website: String @rules(apply: ["url"])
+        phone: String
+        email: String @rules(apply: ["email"])
+    ): User @guard
+    addPost(file: Upload!, caption: String!): Post @guard
+}
+
+"Account of a person who utilizes this application."
 type User {
     id: ID!
     name: String!
@@ -26,19 +46,12 @@ type User {
     phone: String!
     email: String!
     email_verified_at: DateTime
-    total_posts: Int
-    total_followers: Int
-    total_following: Int
     created_at: DateTime!
     updated_at: DateTime!
     posts: [Post!]! @hasMany
-}
-
-type UserFollower {
-    id: ID!
-    user_id: ID!
-    follower_id: ID!
-    user: User! @belongsTo
+    total_posts: Int! @count(relation: "posts")
+    total_followers: Int! @count(relation: "followers")
+    total_following: Int! @count(relation: "following")
 }
 
 type Post {
@@ -46,7 +59,7 @@ type Post {
     user_id: ID!
     caption: String!
     image: String!
-    likes: Int
+    likes: Int! @count(relation: "postLikes")
     created_time_ago: String!
     created_at: DateTime!
     updated_at: DateTime!
@@ -75,20 +88,11 @@ type PostComment {
     user: User! @belongsTo
 }
 
-type Mutation {
-    login(email: String!, password: String!): String!
-    logout: String @guard
-    like(post_id: ID!): PostLike @guard
-    unlike(post_id: ID!): String @guard
-    follow(user_id: ID!): UserFollower @guard
-    addComment(post_id: ID!, comment: String!): PostComment @guard
-    addPost(caption: String!, file: Upload!): Post @guard
-    updateUser(
-        name: String
-        username: String
-        bio: String
-        website: String @rules(apply: ["url"])
-        phone: String
-        email: String @rules(apply: ["email"])
-    ): User @guard
+type UserFollower {
+    id: ID!
+    user_id: ID!
+    follower_id: ID!
+    created_at: DateTime!
+    updated_at: DateTime!
+    user: User! @belongsTo
 }
