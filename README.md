@@ -36,7 +36,8 @@ This is an Instagram clone built with TailwindCSS, React, Apollo Client and Lara
 
 Start the backend services (MySQL, Apache, etc) using Laravel Sail:
 
-`cd backend && sail up`
+`cd backend && composer install`
+`sail up`
 
 or if you don't have an alias for sail:
 
