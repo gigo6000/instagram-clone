@@ -42,7 +42,7 @@ Start the backend services (MySQL, Apache, etc) using Laravel Sail:
 
 or if you don't have an alias for sail:
 
-`cd backend && ./vendor/bin/sail up`
+`cd backend && composer install && ./vendor/bin/sail up`
 
 ### Frontend
 
