@@ -48,7 +48,9 @@ or if you don't have an alias for sail:
 
 Start the React app:
 
-`cd frontend && npm run start`
+`cd frontend && npm install`
+
+`npm run start`
 
 ## Youtube Tutorial
 
